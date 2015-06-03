@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="template">
+    <name>mytemplate</name>
+    <creationDate>2015-06-03</creationDate>
+    <author>Li</author>
+    <authorEmail>saiqiuli@gmail.com</authorEmail>
+    <copyright>Li 2015</copyright>
+    <license>MIT</license>
+    <version>0.1</version>
+    <description>Test Template</description>
+    <files>
+        <filename>index.php</filename>
+        <filename>templateDetails.xml</filename>
+        <folder>css</folder>
+    </files>
+    <positions>
+        <position>breadcrumb</position>
+        <position>left</position>
+        <posistion>right</posistion>
+        <posistion>top</posistion>
+        <posistion>user1</posistion>
+        <posistion>user2</posistion>
+        <posistion>user3</posistion>
+        <posistion>user4</posistion>
+        <posistion>footer</posistion>
+    </positions>
+</extension>
