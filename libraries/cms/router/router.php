@@ -215,6 +215,7 @@ class JRouter
 	 */
 	public function parse(&$uri)
 	{
+                
 		// Do the preprocess stage of the URL build process
 		$vars = $this->processParseRules($uri, self::PROCESS_BEFORE);
 
@@ -257,7 +258,6 @@ class JRouter
 		{
 			return clone $this->cache[$key];
 		}
-
 		// Create the URI object
 		$uri = $this->createURI($url);
 

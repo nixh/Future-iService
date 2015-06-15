@@ -76,7 +76,7 @@ class JRouterSite extends JRouter
 			$uri->setScheme('https');
 			$this->app->redirect((string) $uri);
 		}
-
+                
 		// Get the path
 		// Decode URL to convert punycode to unicode so that strings match when routing.
 		$path = urldecode($uri->getPath());

@@ -39,7 +39,7 @@ else
 JHtml::_('bootstrap.framework');
 $doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/template.js');
 $doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/lib/jquery113min.js');
-
+$doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/tab_extension.js');
 // Add Stylesheets
 $doc->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/template.css');
 $doc->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/qqservice.css');
