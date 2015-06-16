@@ -23,3 +23,8 @@ function changetab_byhash() {
 }
 $(changetab_byhash);
 $(window).on('hashchange', changetab_byhash);
+
+// $(function(){
+//     $('[itemprop="articleBody"]').children("p").find("img").css('float','right');
+//     $('[itemprop="articleBody"]').children("div").css('clear','both');
+// });

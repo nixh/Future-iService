@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="3.1"
+	client="site"
+	method="upgrade">
+	<name>BM Articles Mega Category</name>
+	<author>Brainymore</author>
+	<creationDate>April 2015</creationDate>
+	<copyright>Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>brainymore@gmail.com</authorEmail>
+	<authorUrl>www.brainymore.com</authorUrl>
+	<version>1.0.0</version>
+	<description>BM_ARTICLES_MEGA_CATEGORY_XML_DESCRIPTION</description>
+	<files>
+		<filename module="mod_bm_articles_mega_category">mod_bm_articles_mega_category.php</filename>
+		<folder>tmpl</folder>
+		<folder>language</folder>
+		<folder>assets</folder>
+		<folder>core</folder>
+		<folder>elements</folder>
+		<folder>libs</folder>
+		<filename>helper.php</filename>
+		<filename>js.php</filename>
+		<filename>defines.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_bm_articles_mega_category.xml</filename>
+		<filename>LICENSE.txt</filename>
+		<filename>README.txt</filename>
+	</files>
+	<languages folder="language/en-GB">
+		<language tag="en-GB">en-GB.mod_bm_articles_mega_category.ini</language>
+		<language tag="en-GB">en-GB.mod_bm_articles_mega_category.sys.ini</language>
+	</languages>
+	<help key="JHELP_EXTENSIONS_MODULE_MANAGER_BM_ARTICLES" />
+	<config>
+		<fields name="params" addfieldpath="/modules/mod_bm_articles_mega_category/elements/" >
+			<fieldset name="basic">
+				<field name="" type="header" default="MOD_BM_CONFIG_COMMON" module="mod_bm_articles_mega_category" label="" description=""/>
+				
+				<field name="source" type="list" default="filter" label="MOD_BM_SOURCE" description="MOD_BM_SOURCE_DESC">
+					<option value="filter">Retrieve items from categories</option>
+					<option value="specific">Select specific items</option>
+				</field>
+				<field
+						name="catid"
+						type="category"
+						extension="com_content"
+						multiple="true"
+						size="10"
+						default=""
+						label="JCATEGORY"
+						description="MOD_BM_FIELD_CATEGORY_DESC" >
+						<option value="">JOPTION_ALL_CATEGORIES</option>
+					</field>
+					
+				<field
+					name="get_items_subcate"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_GET_ITEMS_SUBCATE" 
+					description="MOD_BM_GET_ITEMS_SUBCATE_DESC"
+					>
+					<option value="1">JYes</option>
+					<option value="0">JNo</option>
+				</field>
+				<field
+					name="count"
+					type="text"
+					default="8"
+					label="MOD_BM_FIELD_COUNT_LABEL"
+					description="MOD_BM_FIELD_COUNT_DESC" filter="raw"/>
+	
+				<field
+					name="show_featured"
+					type="list"
+					default=""
+					label="MOD_BM_FIELD_FEATURED_LABEL"
+					description="MOD_BM_FIELD_FEATURED_DESC">
+					<option
+						value="">JSHOW</option>
+					<option
+						value="0">JHIDE</option>
+					<option
+						value="1">MOD_BM_VALUE_ONLY_SHOW_FEATURED</option>
+				</field>
+	
+				<field
+					name="ordering"
+					type="list"
+					default="published"
+					label="MOD_BM_FIELD_ORDERING_LABEL"
+					description="MOD_BM_FIELD_ORDERING_DESC">
+					<option
+						value="c_dsc">MOD_BM_VALUE_RECENT_ADDED</option>
+					<option
+						value="m_dsc">MOD_BM_VALUE_RECENT_MODIFIED</option>
+					<option
+						value="p_dsc">MOD_BM_VALUE_RECENT_PUBLISHED</option>
+					<option
+						value="mc_dsc">MOD_BM_VALUE_RECENT_TOUCHED</option>
+				</field>
+	
+				<field
+					name="user_id"
+					type="list"
+					default="0"
+					label="MOD_BM_FIELD_USER_LABEL"
+					description="MOD_BM_FIELD_USER_DESC">
+					<option
+						value="0">MOD_BM_VALUE_ANYONE</option>
+					<option
+						value="by_me">MOD_BM_VALUE_ADDED_BY_ME</option>
+					<option
+						value="not_me">MOD_BM_VALUE_NOTADDED_BY_ME</option>
+				</field>	
+				<field
+					name="items_id"
+					type="text"
+					default=""
+					label="MOD_BM_ITEMS_ID"
+					description="MOD_BM_ITEMS_ID_DESC" filter="raw"/>			
+					
+				<field name="" type="header" default="MOD_BM_CONFIG_DISPLAY" module="mod_bm_articles_mega_category" label="" description=""/>       
+			     
+				<field
+					name="width_image"
+					type="text"
+					default="250"
+					label="MOD_BM_WIDTH_IMAGE"
+					description="MOD_BM_WIDTH_IMAGE_DESC" />
+				<field
+					name="height_image"
+					type="text"
+					default="150"
+					label="MOD_BM_HEIGHT_IMAGE"
+					description="MOD_BM_HEIGHT_IMAGE_DESC" />
+				<!--<field
+                    name="width_thumb"
+                    type="text"
+                    default="150"
+                    label="MOD_BM_WIDTH_THUMB"
+                    description="MOD_BM_WIDTH_THUMB_DESC" />
+                <field
+                    name="height_thumb"
+                    type="text"
+                    default="60"
+                    label="MOD_BM_HEIGHT_THUMB"
+                    description="MOD_BM_HEIGHT_THUMB_DESC" />-->
+				
+				<field
+					name="resize_type"
+					type="list"
+					default="5"
+					label="MOD_BM_RESIZE_TYPE" 
+					description="MOD_BM_RESIZE_TYPE_DESC"
+					>                
+					<option value="1">SCALE FILL</option>
+					<option value="2">SCALE INSIDE</option>
+					<option value="3">SCALE OUTSIDE</option>
+					<option value="4">CROP</option>
+					<option value="5">CROP RESIZE</option> 
+					<option value="6">ORIGINAL IMAGE</option>
+				</field>    
+				<field
+					name="image_from"
+					type="list"
+					default="full_article_image"
+					label="MOD_BM_IMAGE_FROM" 
+					description="MOD_BM_IMAGE_FROM_DESC"
+					>                
+					<option value="full_article_image">Full article image</option>
+					<option value="intro_image">Intro Image</option>
+					<option value="intro_text">Intro Text</option>
+	
+				</field>   
+				<field
+					name="column_number"
+					type="list"
+					default="1row"
+					label="MOD_BM_COLUMN_NUMBER" 
+					description="MOD_BM_COLUMN_NUMBER_DESC"
+					>                
+					<option value="1">1 column</option>
+					<option value="2">2 columns</option>
+					<option value="3">3 columns</option>
+					<option value="4">4 columns</option>
+					<option value="5">5 columns</option>
+					<option value="6">6 columns</option>
+				</field>
+					
+				<field
+					name="theme"
+					type="list"
+					default="theme1"
+					label="MOD_BM_THEME" 
+					description="MOD_BM_THEME_DESC"
+					>                
+					<option value="theme1">Theme1</option>
+					<option value="theme2">Theme2</option>
+					<option value="theme3">Theme3</option>
+					<option value="theme4">Theme4</option>
+				</field>	
+				
+				<field
+					name="title_limit"
+					type="text"
+					default="50"
+					label="MOD_BM_TITLE_LIMIT"
+					description="MOD_BM_TITLE_LIMIT_DESC" />	
+				<field
+					name="readmore_limit"
+					type="text"
+					default="200"
+					label="MOD_BM_READMORE_LIMIT"
+					description="MOD_BM_READMORE_LIMIT_DESC" />								
+					
+				<field
+					name="show_title"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_SHOW_TITLE"
+					description="MOD_BM_SHOW_TITLE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>
+				
+				<field
+					name="link_for_title"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_LINK_FOR_TITLE"
+					description="MOD_BM_LINK_FOR_TITLE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>
+				
+				<field
+					name="h_tag_title"
+					type="list"
+					default=""
+					label="MOD_BM_H_TAG_TITLE" 
+					description="MOD_BM_H_TAG_TITLE_DESC"
+					>                
+					<option value="">None</option>
+					<option value="h1">H1</option>
+					<option value="h2">H2</option>
+					<option value="h3">H3</option>
+					<option value="h4">H4</option>
+					<option value="h5">H5</option> 
+				</field> 
+				<field
+					name="cate_title_color"
+					type="color"
+					default="#ffffff"
+					label="MOD_BM_CATE_TITLE_COLOR"
+					description="MOD_BM_CATE_TITLE_COLOR_DESC" 
+				/>
+				<field
+					name="cate_header_bg"
+					type="color"
+					default="#ffffff"
+					label="MOD_BM_CATE_HEADER_BG"
+					description="MOD_BM_CATE_HEADER_BG_DESC" 
+				/>	
+				<field
+					name="title_color"
+					type="color"
+					default="#08c"
+					label="MOD_BM_TITLE_COLOR"
+					description="MOD_BM_TITLE_COLOR_DESC" 
+				/>
+				<field
+					name="desc_color"
+					type="color"
+					default="#333"
+					label="MOD_BM_DESC_COLOR"
+					description="MOD_BM_DESC_COLOR_DESC" 
+				/>
+				<field
+					name="background_color"
+					type="color"
+					default="#fff"
+					label="MOD_BM_BACKGROUND_COLOR"
+					description="MOD_BM_BACKGROUND_COLOR_DESC" 
+				/>					
+				<field
+					name="show_desc"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_SHOW_DESC"
+					description="MOD_BM_SHOW_DESC_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>						
+				<field
+					name="show_readmore"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_SHOW_READMORE"
+					description="MOD_BM_SHOW_READMORE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>
+				<field
+					name="readmore_label"
+					type="text"
+					default="More detail"
+					label="MOD_BM_READMORE_LABEL"
+					description="MOD_BM_READMORE_LABEL_DESC" />
+				<field
+					name="show_date"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_SHOW_DATE"
+					description="MOD_BM_SHOW_DATE_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>	
+				<field
+					name="date_format"
+					type="text"
+					default="d F Y"
+					label="MOD_BM_DATE_FORMAT"
+					description="MOD_BM_DATE_FORMAT_DESC" />
+				<field
+					name="keep_html"
+					type="radio"
+					class="btn-group"
+					default="0"
+					label="MOD_BM_KEEP_HTML"
+					description="MOD_BM_KEEP_HTML_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>
+				<field
+					name="show_module_on_detail"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_BM_SHOW_MODULE_ON_DETAIL"
+					description="MOD_BM_SHOW_MODULE_ON_DETAIL_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>	
+				<field
+					name="show_module_on_category"
+					type="radio"
+					class="btn-group"
+					default="0"
+					label="MOD_BM_SHOW_MODULE_ON_CATEGORY"
+					description="MOD_BM_SHOW_MODULE_ON_CATEGORY_DESC">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+				</field>	
+    
+			</fieldset>
+
+			<fieldset
+				name="advanced">
+				<field
+					name="pretext"
+					type="textarea"
+					filter="safehtml"
+					cols="30"
+					rows="5"
+					label="MOD_BM_PRE_TEXT_LABEL"
+					description="MOD_BM_PRE_TEXT_DESC" />
+				<field
+					name="posttext"
+					type="textarea"
+					filter="safehtml"
+					cols="30"
+					rows="5"
+					label="MOD_BM_POST_TEXT_LABEL"
+					description="MOD_BM_POST_TEXT_DESC" />
+					
+				<field                                   
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea" rows="3"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				<field
+					name="cachemode"
+					type="hidden"
+					default="static">
+					<option
+						value="static"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -69,7 +69,14 @@ class modDJMenuHelper {
 		$rows 	= $menu->getItems('menutype', $this->name);
 		
 		$children = array();
-		//$app->enqueueMessage('<pre>'.print_r($rows, true).'</pre>');
+		#$app->enqueueMessage('<pre>'.print_r($rows, true).'</pre>');
+
+                $options = array();
+
+                $categories = JCategories::getInstance('Content', $options);
+                
+		#$app->enqueueMessage('<pre>'.print_r($categories, true).'</pre>');
+                
 		
 		foreach ($rows as $v) {
 			if($end && $v->level > $end){
@@ -232,7 +239,7 @@ class modDJMenuHelper {
 
                 #First Part
                 echo '<div>';
-                echo '<div><div><a href="index.php">Brand</a></div></div>';
+                echo '<div><div data-src="index.php">Brand</div></div>';
                 echo '<div><div id="custom_smallicon"><span class="glyphicon glyphicon-th-list">+</span></div></div>';
 
                 foreach($children[$id] as $row) {
@@ -240,7 +247,8 @@ class modDJMenuHelper {
                     @$havechild = is_array($children[$row->id]);
                     echo '<div>';
                     $flink = $this->mosGetMenuLink($row, 0, $this->params);
-                    echo '<div>'.$flink.'</div>';
+                    #echo '<div>'.$flink.'</div>';
+                    echo '<div data-src="'.$row->flink.'">'.$row->title.'</div>';
                     if($havechild) {
                         echo '<div class="nav-hide">';
                         if($children[$row->id]) {
