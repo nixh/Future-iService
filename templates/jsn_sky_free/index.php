@@ -1,534 +1,218 @@
 <?php
 /**
- * @author    JoomlaShine.com http://www.joomlashine.com
- * @copyright Copyright (C) 2008 - 2011 JoomlaShine.com. All rights reserved.
- * @license   GNU/GPL v2 http://www.gnu.org/licenses/gpl-2.0.html
+ * @package     Joomla.Site
+ * @subpackage  Templates.protostar
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access
-defined('_JEXEC') or die('Restricted index access');
+defined('_JEXEC') or die;
 
-// Load template framework
-if (!defined('JSN_PATH_TPLFRAMEWORK')) {
-	require_once JPATH_ROOT . '/plugins/system/jsntplframework/jsntplframework.defines.php';
-	require_once JPATH_ROOT . '/plugins/system/jsntplframework/libraries/joomlashine/loader.php';
+$app             = JFactory::getApplication();
+$doc             = JFactory::getDocument();
+$user            = JFactory::getUser();
+$this->language  = $doc->language;
+$this->direction = $doc->direction;
+
+// Getting params from template
+$params = $app->getTemplate(true)->params;
+
+// Detecting Active Variables
+$option   = $app->input->getCmd('option', '');
+$view     = $app->input->getCmd('view', '');
+$layout   = $app->input->getCmd('layout', '');
+$task     = $app->input->getCmd('task', '');
+$itemid   = $app->input->getCmd('Itemid', '');
+$sitename = $app->get('sitename');
+
+if($task == "edit" || $layout == "form" )
+{
+	$fullWidth = 1;
+}
+else
+{
+	$fullWidth = 0;
 }
 
-// Preparing template parameters
-JSNTplTemplateHelper::prepare();
+// Add JavaScript Frameworks
+JHtml::_('bootstrap.framework');
+$doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/template.js');
+$doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/lib/jquery113min.js');
+$doc->addScript($this->baseurl . '/templates/' . $this->template . '/js/tab_extension.js');
+// Add Stylesheets
+$doc->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/template.css');
+$doc->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/qqservice.css');
+// Load optional RTL Bootstrap CSS
+JHtml::_('bootstrap.loadCss', false, $this->direction);
 
-// Get template utilities
-$jsnutils = JSNTplUtils::getInstance();
+// Adjusting content width
+if ($this->countModules('position-7') && $this->countModules('position-8'))
+{
+	$span = "span6";
+}
+elseif ($this->countModules('position-7') && !$this->countModules('position-8'))
+{
+	$span = "span9";
+}
+elseif (!$this->countModules('position-7') && $this->countModules('position-8'))
+{
+	$span = "span9";
+}
+else
+{
+	$span = "span12";
+}
+
+// Logo file or site title param
+if ($this->params->get('logoFile'))
+{
+	$logo = '<img src="' . JUri::root() . $this->params->get('logoFile') . '" alt="' . $sitename . '" />';
+}
+elseif ($this->params->get('sitetitle'))
+{
+	$logo = '<span class="site-title" title="' . $sitename . '">' . htmlspecialchars($this->params->get('sitetitle')) . '</span>';
+}
+else
+{
+	$logo = '<span class="site-title" title="' . $sitename . '">' . $sitename . '</span>';
+}
 ?>
 <!DOCTYPE html>
-<!-- <?php echo $this->template . ' ' . JSNTplHelper::getTemplateVersion($this->template); ?> -->
-<html lang="<?php echo $this->language ?>" dir="<?php echo $this->direction; ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<jdoc:include type="head" />
+	<?php // Use of Google Font ?>
+	<?php if ($this->params->get('googleFont')) : ?>
+		<link href='//fonts.googleapis.com/css?family=<?php echo $this->params->get('googleFontName'); ?>' rel='stylesheet' type='text/css' />
+		<style type="text/css">
+			h1,h2,h3,h4,h5,h6,.site-title{
+				font-family: '<?php echo str_replace('+', ' ', $this->params->get('googleFontName')); ?>', sans-serif;
+			}
+		</style>
+	<?php endif; ?>
+	<?php // Template color ?>
+	<?php if ($this->params->get('templateColor')) : ?>
+	<style type="text/css">
+      	/*
+		body.site
+		{
+			border-top: 3px solid <?php echo $this->params->get('templateColor'); ?>;
+			background-color: <?php echo $this->params->get('templateBackgroundColor'); ?>
+		}
+        
+		a
+		{
+			color: <?php echo $this->params->get('templateColor'); ?>;
+		}
+		.navbar-inner, .nav-list > .active > a, .nav-list > .active > a:hover, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .nav-pills > .active > a, .nav-pills > .active > a:hover,
+		.btn-primary
+		{
+			background: <?php echo $this->params->get('templateColor'); ?>;
+		}
+		.navbar-inner
+		{
+			-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+			-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+		}
+      */
+	</style>
+	<?php endif; ?>
+	<!--[if lt IE 9]>
+		<script src="<?php echo JUri::root(true); ?>/media/jui/js/html5.js"></script>
+	<![endif]-->
+  <script type="text/javascript">
+var LHCChatOptions = {};
+LHCChatOptions.opt = {widget_height:340,widget_width:300,popup_height:520,popup_width:500};
+(function() {
+var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+var refferer = (document.referrer) ? encodeURIComponent(document.referrer.substr(document.referrer.indexOf('://')+1)) : '';
+var location  = (document.location) ? encodeURIComponent(window.location.href.substring(window.location.protocol.length)) : '';
+po.src = '//usnyfuture.com/livehelperchat/index.php/chat/getstatus/(click)/internal/(position)/bottom_right/(ma)/br/(top)/350/(units)/pixels/(leaveamessage)/true?r='+refferer+'&l='+location;
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+</script>
 </head>
-<body id="jsn-master" class="<?php echo $this->bodyClass ?>">
-	<?php
-	/*====== Show modules in position "topbar" ======*/
-	if ($jsnutils->countModules('topbar') > 0) {
-	?>
-	<div id="jsn-topbar">
-		<div id="jsn-pos-topbar">
-			<jdoc:include type="modules" name="topbar" style="jsnmodule" />
-		</div>
-		<div class="clearbreak"></div>
-	</div>
-	<?php } ?>
-	<div id="jsn-page">
-	<?php
-		/*====== Show modules in position "stick-lefttop" ======*/
-		if ($jsnutils->countModules('stick-lefttop') > 0) {
-	?>
-		<div id="jsn-pos-stick-lefttop">
-			<jdoc:include type="modules" name="stick-lefttop" style="jsnmodule" />
-		</div>
-	<?php
-		}
 
-		/*====== Show modules in position "stick-leftmiddle" ======*/
-		if ($jsnutils->countModules('stick-leftmiddle') > 0) {
-	?>
-		<div id="jsn-pos-stick-leftmiddle">
-			<jdoc:include type="modules" name="stick-leftmiddle" style="jsnmodule" />
-		</div>
-	<?php
-		}
+<!--<body class="site <?php echo $option
+	. ' view-' . $view
+	. ($layout ? ' layout-' . $layout : ' no-layout')
+	. ($task ? ' task-' . $task : ' no-task')
+	. ($itemid ? ' itemid-' . $itemid : '')
+	. ($params->get('fluidContainer') ? ' fluid' : '');
+?>">-->
+  <body>
 
-		/*====== Show modules in position "stick-leftbottom" ======*/
-		if ($jsnutils->countModules('stick-leftbottom') > 0) {
-	?>
-		<div id="jsn-pos-stick-leftbottom">
-			<jdoc:include type="modules" name="stick-leftbottom" style="jsnmodule" />
-		</div>
-	<?php
-		}
-
-		/*====== Show modules in position "stick-righttop" ======*/
-		if ($jsnutils->countModules('stick-righttop') > 0) {
-	?>
-		<div id="jsn-pos-stick-righttop">
-			<jdoc:include type="modules" name="stick-righttop" style="jsnmodule" />
-		</div>
-	<?php
-		}
-
-		/*====== Show modules in position "stick-rightmiddle" ======*/
-		if ($jsnutils->countModules('stick-rightmiddle') > 0) {
-	?>
-		<div id="jsn-pos-stick-rightmiddle">
-			<jdoc:include type="modules" name="stick-rightmiddle" style="jsnmodule" />
-		</div>
-	<?php
-		}
-
-		/*====== Show modules in position "stick-rightbottom" ======*/
-		if ($jsnutils->countModules('stick-rightbottom') > 0) {
-	?>
-		<div id="jsn-pos-stick-rightbottom">
-			<jdoc:include type="modules" name="stick-rightbottom" style="jsnmodule" />
-		</div>
-	<?php
-		}
-	?>
-		<div id="jsn-header">
-			<div id="jsn-headerright"><div id="jsn-headerright-inner">
-			<?php
-				/*====== Show modules in position "top" ======*/
-				if ($jsnutils->countModules('top') > 0) {
-			?>
-				<div id="jsn-pos-top" class="pull-right">
-					<div id="jsn-pos-top_inner">
-						<jdoc:include type="modules" name="top" style="jsnmodule" />
-						<div class="clearbreak"></div>
+	<!-- Body -->
+	<div class="body">
+		<div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : ''); ?>">
+			<!-- Header -->
+			<header class="header" role="banner">
+				<div class="header-inner clearfix">
+					<a class="brand pull-left" href="<?php echo $this->baseurl; ?>/">
+						<?php echo $logo; ?>
+						<?php if ($this->params->get('sitedescription')) : ?>
+							<?php echo '<div class="site-description">' . htmlspecialchars($this->params->get('sitedescription')) . '</div>'; ?>
+						<?php endif; ?>
+					</a>
+					<div class="header-search pull-right">
+						<jdoc:include type="modules" name="position-0" style="none" />
 					</div>
 				</div>
-			<?php
-				}
-			?>
-			</div></div>
-			<div id="jsn-header_inner">
-                <div id="jsn-header_inner2">
-					<div id="jsn-logo" class="pull-left">
-					<?php
-						/*====== Show modules in position "logo" ======*/
-						if ($jsnutils->countModules('logo') > 0) {
-					?>
-						<div id="jsn-pos-logo">
-							<jdoc:include type="modules" name="logo" style="jsnmodule" />
+			</header>
+			<?php if ($this->countModules('position-1')) : ?>
+				<nav class="navigation" role="navigation">
+					<jdoc:include type="modules" name="position-1" style="none" />
+				</nav>
+			<?php endif; ?>
+			<jdoc:include type="modules" name="banner" style="xhtml" />
+			<div class="row-fluid">
+				<?php if ($this->countModules('position-8')) : ?>
+					<!-- Begin Sidebar -->
+					<div id="sidebar" class="span3">
+						<div class="sidebar-nav">
+							<jdoc:include type="modules" name="position-8" style="xhtml" />
 						</div>
-
-					<?php
-						/*====== If there are NO modules in position "logo", then show logo image file "logo.png" ======*/
-						} else {
-							/*====== Attach link to logo image ======*/
-							if (!empty($this->logoLink)) {
-								echo '<a href="' . $this->logoLink . '" title="' . $this->logoSlogan . '">';
-							}
-
-							/*====== Show desktop logo ======*/
-							if (!empty($this->logoFile)) {
-								echo '<img src="' . $this->logoFile . '" alt="' . $this->logoSlogan . '" id="jsn-logo-desktop" />';
-							}
-
-							if ($this->logoLink != "") {
-								echo '</a>';
-							}
-						}
-					?>
 					</div>
-							<?php
-					if ($this->helper->countPositions('mainmenu', 'toolbar')) {
-				?>
-					<div id="jsn-menu" class="pull-right">
-					<?php
-						/*====== Show modules in position "mainmenu" ======*/
-						if ($jsnutils->countModules('mainmenu') > 0) {
-					?>
-						<div id="jsn-pos-mainmenu">
-							<jdoc:include type="modules" name="mainmenu" style="jsnmodule" />
-						</div>
-					<?php
-						}
-
-						/*====== Show modules in position "toolbar" ======*/
-						if ($jsnutils->countModules('toolbar') > 0) {
-					?>
-						<div id="jsn-pos-toolbar">
-							<jdoc:include type="modules" name="toolbar" style="jsnmodule" />
-						</div>
-					<?php
-						}
-					?>
-
+					<!-- End Sidebar -->
+				<?php endif; ?>
+				<main id="content" role="main" class="<?php echo $span; ?>">
+					<!-- Begin Content -->
+					<jdoc:include type="modules" name="position-3" style="xhtml" />
+					<jdoc:include type="message" />
+					<jdoc:include type="component" />
+					<jdoc:include type="modules" name="position-2" style="none" />
+					<!-- End Content -->
+				</main>
+				<?php if ($this->countModules('position-7')) : ?>
+					<div id="aside" class="span3">
+						<!-- Begin Right Sidebar -->
+						<jdoc:include type="modules" name="position-7" style="well" />
+						<!-- End Right Sidebar -->
 					</div>
-					<div class="clearbreak"></div>
-				</div>
+				<?php endif; ?>
 			</div>
 		</div>
-		<div id="jsn-body">
-
-		<?php
-			}
-
-			/*====== Show modules in content top area ======*/
-			if ($this->helper->countPositions('promo-left', 'promo', 'promo-right', 'content-top')) {
-		?>
-			<div id="jsn-content-top" class="<?php echo (($this->hasPromoLeft)?'jsn-haspromoleft ':'') ?><?php echo (($this->hasPromoRight)?'jsn-haspromoright ':'') ?>">
-                <div id="jsn-promo">
-                    <div id="jsn-promo_inner" class="row-fluid">
-                <?php
-                    foreach ($this->promoColumns AS $id => $class) {
-                        /*====== Show modules in position "promo" ======*/
-                        if ($id == 'promo') {
-                ?>
-                        <div id="jsn-pos-promo" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="promo" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                <?php
-                        }
-
-                        /*====== Show modules in position "promo-left" ======*/
-                        elseif ($id == 'promo-left') {
-                ?>
-                        <div id="jsn-pos-promo-left" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="promo-left" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                <?php
-                        }
-
-                        /*====== Show modules in position "promo-right" ======*/
-                        elseif ($id == 'promo-right') {
-                ?>
-                        <div id="jsn-pos-promo-right" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="promo-right" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                <?php
-                        }
-                    }
-                ?>
-                    </div>
-                </div>
-                <?php
-                    /*====== Show modules in position "content-top" ======*/
-                    if ($jsnutils->countModules('content-top') > 0) {
-                ?>
-                <div id="jsn-pos-content-top" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('content-top'); ?>">
-                    <div id="jsn-pos-content-top_inner">
-                        <div id="jsn-pos-content-top_inner2" class="row-fluid">
-                            <jdoc:include type="modules" name="content-top" style="jsnmodule" class="jsn-roundedbox" columnClass="span<?php echo ceil(12 / $jsnutils->countModules('content-top')); ?>" />
-                        </div>
-                    </div>
-                </div>
-            <?php
-                }
-            ?>
-            </div>
-		<?php
-			}
-		?>
-			<div id="jsn-content" class="<?php echo (($this->hasLeft)?'jsn-hasleft ':'') ?><?php echo (($this->hasRight)?'jsn-hasright ':'') ?><?php echo (($this->hasInnerLeft)?'jsn-hasinnerleft ':'') ?><?php echo (($this->hasInnerRight)?'jsn-hasinnerright ':'') ?>">
-                <div id="jsn-content_inner"><div id="jsn-content_inner1"><div id="jsn-content_inner2"><div id="jsn-content_inner3"><div id="jsn-content_inner4"><div id="jsn-content_inner5"><div id="jsn-content_inner6"><div id="jsn-content_inner7" class="row-fluid">
-        <?php
-            foreach ($this->mainColumns AS $id => $class) {
-                if ($id == 'content') {
-        ?>
-                    <div id="jsn-maincontent" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?> row-fluid">
-        <?php
-                    foreach($this->contentColumns AS $id2 => $class2) {
-                        if ($id2 == 'component') {
-        ?>
-                        <div id="jsn-centercol" class="<?php echo $class2['span']; ?> <?php echo $class2['order']; ?> <?php echo $class2['offset']; ?>">
-                            <div id="jsn-centercol_inner">
-        <?php
-            /*====== Show modules in position "breadcrumbs" ======*/
-            if ($jsnutils->countModules('breadcrumbs') > 0) {
-        ?>
-                                <div id="jsn-breadcrumbs">
-                                    <jdoc:include type="modules" name="breadcrumbs" />
-                                </div>
-        <?php
-            }
-
-            /*====== Show modules in position "user-top" ======*/
-            if ($jsnutils->countModules('user-top') > 0) {
-        ?>
-                                <div id="jsn-pos-user-top" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('user-top'); ?> row-fluid">
-                                    <jdoc:include type="modules" name="user-top" style="jsnmodule" class="jsn-roundedbox" columnClass="span<?php echo ceil(12 / $jsnutils->countModules('user-top')); ?>" />
-                                </div>
-        <?php
-            }
-
-            /*====== Show modules in position "user1" and "user2" ======*/
-            $positionCount = $this->helper->countPositions('user1', 'user2');
-            if ($positionCount)
-            {
-                $grid_suffix = $positionCount;
-        ?>
-                                <div id="jsn-usermodules1" class="jsn-modulescontainer jsn-modulescontainer<?php echo $grid_suffix; ?>">
-                                    <div id="jsn-usermodules1_inner_grid<?php echo $grid_suffix; ?>" class="row-fluid">
-            <?php
-                /*====== Show modules in position "user1" ======*/
-                if ($jsnutils->countModules('user1') > 0) {
-            ?>
-                                        <div id="jsn-pos-user1" class="span<?php echo ceil(12 / $grid_suffix); ?>">
-                                            <jdoc:include type="modules" name="user1" style="jsnmodule" class="jsn-roundedbox" />
-                                        </div>
-            <?php
-                }
-
-                /*====== Show modules in position "user2" ======*/
-                if ($jsnutils->countModules('user2') > 0) {
-            ?>
-                                        <div id="jsn-pos-user2" class="span<?php echo ceil(12 / $grid_suffix); ?>">
-                                            <jdoc:include type="modules" name="user2" style="jsnmodule" class="jsn-roundedbox" />
-                                        </div>
-            <?php
-                }
-            ?>
-                                    </div>
-                                </div>
-        <?php
-            }
-        ?>
-                                <div id="jsn-mainbody-content" class="<?php echo (($this->hasInnerLeft)?'jsn-hasinnerleft ':'') ?><?php echo (($this->hasInnerRight)?'jsn-hasinnerright ':'') ?><?php echo ($jsnutils->countModules('mainbody-top') > 0)?' jsn-hasmainbodytop':'' ?><?php echo ($jsnutils->countModules('mainbody-bottom') > 0)?' jsn-hasmainbodybottom':'' ?><?php echo ($this->showFrontpage)?' jsn-hasmainbody':'' ?>">
-        <?php
-            /*====== Show modules in position "mainbody-top" ======*/
-            if ($jsnutils->countModules('mainbody-top') > 0) {
-        ?>
-                                    <div id="jsn-pos-mainbody-top" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('mainbody-top'); ?> row-fluid">
-                                        <jdoc:include type="modules" name="mainbody-top" style="jsnmodule" class="jsn-roundedbox" />
-                                    </div>
-        <?php
-            }
-
-            /*====== Show mainbody ======*/
-            if ($this->showFrontpage) {
-        ?>
-                                    <div id="jsn-mainbody">
-                                        <jdoc:include type="message" />
-                                        <jdoc:include type="component" />
-                                    </div>
-        <?php
-            }
-
-            /*====== Show modules in position "mainbody-bottom" ======*/
-            if ($jsnutils->countModules('mainbody-bottom') > 0) {
-        ?>
-                                    <div id="jsn-pos-mainbody-bottom" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('mainbody-bottom'); ?> row-fluid">
-                                        <jdoc:include type="modules" name="mainbody-bottom" style="jsnmodule" class="jsn-roundedbox" columnClass="span<?php echo ceil(12 / $jsnutils->countModules('mainbody-bottom')); ?>" />
-                                    </div>
-        <?php
-            }
-        ?>
-                                </div>
-        <?php
-            /*====== Show modules in position "user3" and "user4" ======*/
-            $positionCount = $this->helper->countPositions('user3', 'user4');
-            if ($positionCount) {
-                $grid_suffix = $positionCount;
-        ?>
-                                <div id="jsn-usermodules2" class="jsn-modulescontainer jsn-modulescontainer<?php echo $grid_suffix; ?>">
-                                    <div id="jsn-usermodules2_inner_grid<?php echo $grid_suffix; ?>" class="row-fluid">
-            <?php
-                /*====== Show modules in position "user3" ======*/
-                if ($jsnutils->countModules('user3') > 0) {
-            ?>
-                                        <div id="jsn-pos-user3" class="span<?php echo ceil(12 / $grid_suffix); ?>">
-                                            <jdoc:include type="modules" name="user3" style="jsnmodule" class="jsn-roundedbox" />
-                                        </div>
-            <?php
-                }
-
-                /*====== Show modules in position "user4" ======*/
-                if ($jsnutils->countModules('user4') > 0) { ?>
-                                        <div id="jsn-pos-user4" class="span<?php echo ceil(12 / $grid_suffix); ?>">
-                                            <jdoc:include type="modules" name="user4" style="jsnmodule" class="jsn-roundedbox" />
-                                        </div>
-            <?php
-                }
-            ?>
-                                    </div>
-                                </div>
-        <?php
-            }
-
-            /*====== Show modules in position "user-bottom" ======*/
-            if ($jsnutils->countModules('user-bottom') > 0) { ?>
-                                <div id="jsn-pos-user-bottom" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('user-bottom'); ?> row-fluid">
-                                    <jdoc:include type="modules" name="user-bottom" style="jsnmodule" class="jsn-roundedbox" />
-                                </div>
-        <?php
-            }
-
-            /*====== Show modules in position "banner" ======*/
-            if ($jsnutils->countModules('banner') > 0) {
-        ?>
-                                <div id="jsn-pos-banner">
-                                    <jdoc:include type="modules" name="banner" style="jsnmodule" />
-                                </div>
-        <?php
-            }
-        ?>
-                            </div>
-                        </div>
-        <?php
-                        } elseif ($id2 == 'innerleft') {
-                        /*====== Show modules in position "innerleft" ======*/
-        ?>
-                        <div id="jsn-pos-innerleft" class="<?php echo $class2['span']; ?> <?php echo $class2['order']; ?> <?php echo $class2['offset']; ?>">
-                            <div id="jsn-pos-innerleft_inner">
-                                <jdoc:include type="modules" name="innerleft" style="jsnmodule" class="jsn-roundedbox" />
-                            </div>
-                        </div>
-        <?php
-                        } elseif ($id2 == 'innerright') {
-                        /*====== Show modules in position "innerright" ======*/
-        ?>
-                        <div id="jsn-pos-innerright" class="<?php echo $class2['span']; ?> <?php echo $class2['order']; ?> <?php echo $class2['offset']; ?>">
-                            <div id="jsn-pos-innerright_inner">
-                                <jdoc:include type="modules" name="innerright" style="jsnmodule" class="jsn-roundedbox" />
-                            </div>
-                        </div>
-        <?php
-                        }
-                    }
-        ?>
-                    </div>
-        <?php
-                } elseif ($id == 'left') {
-            /*====== Show modules in position "left" ======*/
-        ?>
-                    <div id="jsn-leftsidecontent" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                        <div id="jsn-leftsidecontent_inner">
-                            <div id="jsn-pos-left">
-                                <jdoc:include type="modules" name="left" style="jsnmodule" class="jsn-roundedbox" />
-                            </div>
-                        </div>
-                    </div>
-        <?php
-                } elseif ($id == 'right') {
-            /*====== Show modules in position "right" ======*/
-        ?>
-                    <div id="jsn-rightsidecontent" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                        <div id="jsn-rightsidecontent_inner">
-                            <div id="jsn-pos-right">
-                                <jdoc:include type="modules" name="right" style="jsnmodule" class="jsn-roundedbox" />
-                            </div>
-                        </div>
-                    </div>
-        <?php
-                }
-            }
-
-        ?>
-                </div></div></div></div></div></div></div></div>
-            </div>
-		<?php
-            /*====== Show elements in content bottom area ======*/
-            if ($this->helper->countPositions('content-bottom', 'user5', 'user6', 'user7')) {
-        ?>
-            <div id="jsn-content-bottom">
-                <div id="jsn-content-bottom_inner"><div id="jsn-content-bottom_inner1">
-                <?php
-                    /*====== Show modules in position "content-bottom" ======*/
-                    if ($jsnutils->countModules('content-bottom') > 0) {
-                ?>
-                    <div id="jsn-pos-content-bottom" class="jsn-modulescontainer jsn-horizontallayout jsn-modulescontainer<?php echo $jsnutils->countModules('content-bottom'); ?> row-fluid">
-                        <jdoc:include type="modules" name="content-bottom" style="jsnmodule" class="jsn-roundedbox" columnClass="span<?php echo ceil(12 / $jsnutils->countModules('content-bottom')); ?>" />
-                    </div>
-                <?php
-                    }
-
-                    if ($this->helper->countPositions('user5', 'user6', 'user7')) {
-                ?>
-                    <div id="jsn-usermodules3" class="jsn-modulescontainer jsn-modulescontainer<?php echo $this->helper->countPositions('user5', 'user6', 'user7'); ?> row-fluid">
-                <?php
-
-                    /*====== Show modules in position "user5", "user6", "user7" ======*/
-                    foreach ($this->userColumns AS $id => $class) {
-
-                        /*====== Show modules in position "user5" ======*/
-                        if ($id == 'user5') {
-                    ?>
-                        <div id="jsn-pos-user5" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="user5" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                    <?php
-                        }
-
-                        /*====== Show modules in position "user6" ======*/
-                        elseif ($id =='user6') {
-                    ?>
-                        <div id="jsn-pos-user6" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="user6" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                    <?php
-                        }
-
-                        /*====== Show modules in position "user7" ======*/
-                        elseif ($id =='user7') {
-                    ?>
-                        <div id="jsn-pos-user7" class="<?php echo $class['span']; ?> <?php echo $class['order']; ?> <?php echo $class['offset']; ?>">
-                            <jdoc:include type="modules" name="user7" style="jsnmodule" class="jsn-roundedbox" />
-                        </div>
-                    <?php
-                        }
-                    ?>
-                <?php
-                    }
-                ?>
-                    </div>
-                <?php
-                    }
-                ?>
-                </div></div>
-            </div>
-        <?php
-            }
-        ?>
-		</div>
-		<?php
-			/*====== Show modules in position "footer" and "bottom" ======*/
-			$positionCount = $this->helper->countPositions('footer', 'bottom');
-			if ($positionCount) {
-				$grid_suffix = $positionCount;
-		?>
-			<div id="jsn-footer">
-				<div id="jsn-footer_inner">
-					<div id="jsn-footermodules" class="jsn-modulescontainer jsn-modulescontainer<?php echo $grid_suffix; ?> row-fluid">
-				<?php
-					/*====== Show modules in position "footer" ======*/
-					if ($jsnutils->countModules('footer') > 0) {
-				?>
-						<div id="jsn-pos-footer">
-							<jdoc:include type="modules" name="footer" style="jsnmodule" />
-						</div>
-				<?php
-					}
-
-					/*====== Show modules in position "bottom" ======*/
-					if ($jsnutils->countModules('bottom') > 0) {
-				?>
-						<div id="jsn-pos-bottom">
-							<jdoc:include type="modules" name="bottom" style="jsnmodule" />
-						</div>
-				<?php
-					}
-				?>
-					</div>
-				</div>
-			</div>
-		<?php
-			}
-		?>
 	</div>
-	<div id="jsn-brand">
-        JSN Sky template designed by <a href="http://www.joomlashine.com" target="_blank" title="Free Hi-Quality Joomla Templates on JoomlaShine">JoomlaShine.com</a>
-    </div>
-<jdoc:include type="modules" name="debug" />
+	<!-- Footer -->
+  	<!--
+	<footer class="footer" role="contentinfo">
+		<div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : ''); ?>">
+			<hr />
+			<jdoc:include type="modules" name="footer" style="none" />
+			<p class="pull-right">
+				<a href="#top" id="back-top">
+					<?php echo JText::_('TPL_PROTOSTAR_BACKTOTOP'); ?>
+				</a>
+			</p>
+			<p>
+				&copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
+			</p>
+		</div>
+	</footer>
+	-->
+	<jdoc:include type="modules" name="debug" style="none" />
 </body>
 </html>

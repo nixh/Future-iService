@@ -415,6 +415,7 @@ class plgSystemTabsHelperReplace
 
 	private function replaceSyntaxItem(&$string, $item, $items, $first = 0)
 	{
+		#JFactory::getApplication()->enqueueMessage("<pre>".print_r($item, true)."</pre>");
 		$s = '#' . preg_quote($item->orig, '#') . '#';
 		if (@preg_match($s . 'u', $string))
 		{
@@ -440,11 +441,15 @@ class plgSystemTabsHelperReplace
 		}
 		$class[] = trim($item->class);
 
-		$html[] = '<div class="' . trim(implode(' ', $class)) . '" id="' . $item->id . '">';
+		$html[] = '<div class="' . trim(implode(' ', $class)) . '" id="' . $item->title . '">';
 
 		if (!$item->haslink)
 		{
 			$class = 'anchor';
+			#$html[] = '<' . $this->params->title_tag . ' class="nn_tabs-title">'
+			#	. '<a id="' . $item->id . '" class="' . $class . '"></a>'
+			#	. $item->title . '</' . $this->params->title_tag . '>';
+
 			$html[] = '<' . $this->params->title_tag . ' class="nn_tabs-title">'
 				. '<a id="' . $item->id . '" class="' . $class . '"></a>'
 				. $item->title . '</' . $this->params->title_tag . '>';
@@ -763,8 +768,8 @@ class plgSystemTabsHelperReplace
 
 			$class = 'nn_tabs-toggle';
 
-			$html[] = '<a href="#' . $item->id . '" class="' . $class . '"'
-				. ' data-toggle="tab" data-id="' . $item->id . '"'
+			$html[] = '<a href="#' . $item->title . '" class="' . $class . '"'
+				. ' data-toggle="tab" data-id="' . $item->title . '"'
 				. '>'
 				. '<span class="nn_tabs-toggle-inner">'
 				. $item->title_full

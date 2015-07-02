@@ -239,7 +239,7 @@ class modDJMenuHelper {
 
                 #First Part
                 echo '<div>';
-                echo '<div><div data-src="index.php">Brand</div></div>';
+                echo '<div><div data-src="index.php"></div></div>';
                 echo '<div><div id="custom_smallicon"><span class="glyphicon glyphicon-th-list">+</span></div></div>';
 
                 foreach($children[$id] as $row) {

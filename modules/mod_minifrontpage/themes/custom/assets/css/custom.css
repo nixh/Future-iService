@@ -25,8 +25,23 @@
 .option-table > div:last-child {
     margin-top: 2px;
 }
+
+
+.option-selected {
+    background: rgba(85, 157, 202, 0.34);
+    cursor: pointer;
+}
+
+.option-selected > div {
+    border-top: 5px solid rgba(255, 255, 255, 0.7);
+    border-bottom: 5px solid rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}
+.option-selected td {
+    background: rgba(255, 255, 255, 0.7) !important;
+}
 .option-table:hover {
-    background: rgba(85, 157, 202, 0.5);
+    background: rgba(85, 157, 202, 0.34);
     cursor: pointer;
 }
 .option-table:hover > div {
@@ -49,7 +64,7 @@
     line-height: 0px;
 }
 .option-image:hover {
-    background: rgba(85, 157, 202, 0.5);
+    background: rgba(85, 157, 202, 0.34);
     cursor: pointer;
 }
 .option-image:hover td {
@@ -102,13 +117,13 @@
         width: 25%;
     }
     .display-table > .large .row .column:nth-child(2) {
-        width: 35%;
+        width: 25%;
     }
     .display-table > .large .row .column:nth-child(2) a {
-        color: gray;
+        color: gray !important;
     }
     .display-table > .large .row .column:last-child {
-        width: 40$;
+        width: 50%;
     }
 }
 .display-image {
@@ -161,7 +176,7 @@
     display: none;
 }
 .display-image > ul li a:hover > .img-title {
-    background-color: rgba(106, 170, 204, .7);
+    background-color: rgba(106, 170, 204, .95);
     display: table;
 }
 .display-image > ul li a > .img-title span {

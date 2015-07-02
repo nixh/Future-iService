@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 		<div></div>
 		<div></div>
 	</div>
-	<table class="option-image">
+	<table class="option-image option-selected">
 		<tr>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>

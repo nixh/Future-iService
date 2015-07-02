@@ -66,20 +66,21 @@ if($params->get('css')=='1') $params->set('css', 'default'); // backward compati
 if($params->get('css')!='0') {
 	$css_fx = 'modules/mod_djmenu/themes/'.$params->get('css','default').'/css/djmenu_fx.css';
 	$css = 'modules/mod_djmenu/themes/'.$params->get('css','default').'/css/djmenu.css';
+        $custom ='modules/mod_djmenu/themes/'.$params->get('css','default').'/css/djmenu_custom.css';
+        $custom_js ='modules/mod_djmenu/themes/'.$params->get('css','default').'/js/djmenu_custom.js';
 } else {
 	$css_fx = 'templates/'.$app->getTemplate().'/css/djmenu_fx.css';
 	$css = 'templates/'.$app->getTemplate().'/css/djmenu.css';
 }
 
 $doc->addStyleSheet(JURI::root(true).'/'.$css);
-
 if($params->get('moo',1)) {
 	
 	$doc->addStyleSheet(JURI::root(true).'/media/djextensions/css/animate.min.css');
 	$doc->addStyleSheet(JURI::root(true).'/modules/mod_djmenu/assets/css/animations.css');
-	$doc->addStyleSheet(JURI::root(true).'/modules/mod_djmenu/assets/css/djmenu_custom.css');
+	#$doc->addStyleSheet(JURI::root(true).'/modules/mod_djmenu/assets/css/djmenu_custom.css');
 	$doc->addScript(JURI::root(true).'/modules/mod_djmenu/assets/js/'.($jquery ? 'jquery.':'').'djmenu.js');
-	$doc->addScript(JURI::root(true).'/modules/mod_djmenu/assets/js/djmenu_custom.js');
+	#$doc->addScript(JURI::root(true).'/modules/mod_djmenu/assets/js/djmenu_custom.js');
 	
 	$doc->addStyleSheet(JURI::root(true).'/'.$css_fx);
 	
@@ -97,6 +98,11 @@ if($params->get('moo',1)) {
 	$doc->addScriptDeclaration($js);
 }
 
+if(!empty($custom)) {
+    $doc->addStyleSheet(JURI::root(true).'/'.$custom);
+    $doc->addScript(JURI::root(true).'/'.$custom_js);
+    
+}
 $params->def('module_id',$module->id);
 $djmenu = new modDJMenuHelper();
 

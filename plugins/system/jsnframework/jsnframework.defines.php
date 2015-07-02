@@ -19,7 +19,7 @@ defined('DS') OR define('DS', DIRECTORY_SEPARATOR);
 
 // Define identified name and version
 define('JSN_FRAMEWORK_IDENTIFIED_NAME',	'ext_framework');
-define('JSN_FRAMEWORK_VERSION',			'1.5.3');
+define('JSN_FRAMEWORK_VERSION',			'1.5.4');
 
 // Define required Joomla version
 define('JSN_FRAMEWORK_REQUIRED_JOOMLA_VER', '3.0');

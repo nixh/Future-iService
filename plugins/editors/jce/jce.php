@@ -177,7 +177,7 @@ class plgEditorJCE extends JPlugin {
                 $return .= "\n<div id=\"editor-xtd-buttons\" class=\"btn-toolbar pull-left\">\n";
                 $return .= "\n<div class=\"btn-toolbar\">\n";
 
-                foreach ($buttons as $button) {
+                foreach ($results as $button) {
                     /*
                      * Results should be an object
                      */

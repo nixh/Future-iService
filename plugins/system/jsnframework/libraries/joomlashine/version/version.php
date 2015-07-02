@@ -38,7 +38,8 @@ class JSNVersion
 		'com_sample',
 		'com_uniform',
 		'com_mobilize',
-		'com_pagebuilder'
+		'com_pagebuilder',
+		'com_easyslider'
 	);
 
 	/**

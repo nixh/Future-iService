@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.x" type="component" method="upgrade">
 <name>ImageShow</name>
-<version>4.9.0</version>
+<version>4.9.1</version>
 <edition>FREE</edition>
-<creationDate>03/06/2015</creationDate>
+<creationDate>06/22/2015</creationDate>
 <copyright>Copyright (c) 2008 - 2013 - JoomlaShine.com</copyright>
 <license>GNU/GPL v2 http://www.gnu.org/licenses/gpl-2.0.html</license>
 <author>JoomlaShine.com</author>
@@ -143,7 +143,7 @@ JSN ImageShow Default Theme
 <filename>index.html</filename>
 <filename>install.mysql.sql</filename>
 <filename>install.sqlsrv.sql</filename>
-<filename>jsn_imageshow_free_4.9.0.checksum</filename>
+<filename>jsn_imageshow_free_4.9.1.checksum</filename>
 <filename>jsninstaller.php</filename>
 <filename>uninstall.mysql.sql</filename>
 <filename>uninstall.sqlsrv.sql</filename>
